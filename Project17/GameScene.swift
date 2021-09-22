@@ -94,6 +94,38 @@ class GameScene: SKScene , SKPhysicsContactDelegate{
         }
     }
     
+    
+    
+    //MARK: - Player Movement
+     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        var location = touch.location(in: self)
+        //dont go below that point,near score label
+        if location.y < 100 {
+            location.y = 100
+        }
+        //dont go above that point
+        else if location.y > 668 {
+            location.y = 668
+        }
+        //move the player whenever they move their touch
+        player.position = location
+    }
+    
+    
+    //MARK: - Collision with player
+    func didBegin(_ contact: SKPhysicsContact) {
+        if let explosion = SKEmitterNode(fileNamed: "explosion") {
+            explosion.position = player.position
+            addChild(explosion)
+        }
+        player.removeFromParent()
+        isGameOver = true
+    }
+    
+    
+    
+    
     //MARK: - Create Enemy
     
     @objc func createEnemy() {
